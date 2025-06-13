@@ -4,6 +4,19 @@
 
 @section('content')
 <div class="container">
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-check-circle fa-2x me-3"></i>
+            <div>
+                <h4 class="alert-heading mb-1">Bestelling Succesvol!</h4>
+                <p class="mb-0">{{ session('success') }}</p>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     <div class="row">
         <div class="col-md-8">
             <h1 class="mb-4">Order #{{ $order->id }}</h1>

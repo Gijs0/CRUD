@@ -11,14 +11,16 @@ class OrderItem extends Model
 
     protected $fillable = [
         'order_id',
-        'product_id',
+        'ticket_id',
         'quantity',
-        'price'
+        'price',
+        'ticket_code',
+        'is_used'
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'quantity' => 'integer'
+        'is_used' => 'boolean'
     ];
 
     public function order()
@@ -26,8 +28,8 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function product()
+    public function ticket()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Ticket::class);
     }
 }

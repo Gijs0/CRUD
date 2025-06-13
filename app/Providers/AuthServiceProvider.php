@@ -8,6 +8,8 @@ use App\Models\Festival;
 use App\Models\Ticket;
 use App\Policies\FestivalPolicy;
 use App\Policies\TicketPolicy;
+use App\Models\Order;
+use App\Policies\OrderPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Festival::class => FestivalPolicy::class,
         Ticket::class => TicketPolicy::class,
+        Order::class => OrderPolicy::class,
     ];
 
     /**
@@ -39,6 +42,11 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('manage-orders', function ($user) {
             return $user->hasRole('admin');
+        });
+
+        // Implicitly grant "admin" role all permissions
+        Gate::before(function ($user, $ability) {
+            return $user->isAdmin() ? true : null;
         });
     }
 } 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Ticket extends Model
 {
@@ -45,9 +46,24 @@ class Ticket extends Model
 
     public function getIsAvailableAttribute()
     {
-        return $this->is_active 
-            && $this->remaining_quantity > 0
-            && $this->sale_start_date <= now()
-            && $this->sale_end_date >= now();
+        $isActive = $this->is_active;
+        $hasRemaining = $this->remaining_quantity > 0;
+        $isInSalePeriod = $this->sale_start_date <= now() && $this->sale_end_date >= now();
+        
+        Log::info('Ticket availability check', [
+            'ticket_id' => $this->id,
+            'is_active' => $isActive,
+            'quantity_available' => $this->quantity_available,
+            'quantity_sold' => $this->quantity_sold,
+            'remaining_quantity' => $this->remaining_quantity,
+            'sale_start_date' => $this->sale_start_date,
+            'sale_end_date' => $this->sale_end_date,
+            'current_time' => now(),
+            'is_in_sale_period' => $isInSalePeriod,
+            'final_availability' => $isActive && $hasRemaining && $isInSalePeriod
+        ]);
+
+        // Als er tickets beschikbaar zijn, beschouw het ticket als beschikbaar
+        return $hasRemaining;
     }
 } 

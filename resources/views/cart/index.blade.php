@@ -50,7 +50,7 @@
                                                 </form>
                                             </td>
                                             <td class="text-end">€{{ number_format($item['price'], 2) }}</td>
-                                            <td class="text-end">€{{ number_format($item['subtotal'], 2) }}</td>
+                                            <td class="text-end">€{{ number_format($item['price'] * $item['quantity'], 2) }}</td>
                                             <td class="text-end">
                                                 <form action="{{ route('cart.remove', $item['id']) }}" method="POST" class="d-inline">
                                                     @csrf

@@ -11,12 +11,12 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
-        'total_amount',
-        'status',
         'customer_name',
         'customer_email',
         'customer_phone',
-        'shipping_address'
+        'shipping_address',
+        'status',
+        'total_amount'
     ];
 
     protected $casts = [
@@ -28,8 +28,13 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function orderItems()
+    public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasManyThrough(Ticket::class, OrderItem::class);
     }
 }
