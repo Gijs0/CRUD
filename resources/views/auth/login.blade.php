@@ -1,6 +1,11 @@
 <x-guest-layout>
     <div class="auth-container">
         <div class="auth-form-container">
+            <div class="auth-brand">
+                <a href="{{ route('welcome') }}">
+                    <i class="fas fa-ticket-alt me-2"></i>Festival Tickets
+                </a>
+            </div>
             <div class="auth-header">
                 <h2 class="auth-title">
                     {{ __('Sign in to your account') }}

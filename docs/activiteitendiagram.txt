@@ -1,0 +1,151 @@
+ACTIVITEITENDIAGRAM - TICKET AANKOOPPROCES
+==========================================
+
+HOOFDPROCES: Tickets Kopen van Festival
+---------------------------------------
+
+START: Gebruiker bezoekt website
+
+ACTIVITEIT 1: Homepage Bekijken
+- Input: Geen
+- Actie: Systeem toont featured festivals
+- Output: Homepage met festival overzicht
+- Beslissing: Wil gebruiker festivals bekijken?
+  → JA: Ga naar Activiteit 2
+  → NEE: Ga naar Activiteit 9 (Verlaat Website)
+
+ACTIVITEIT 2: Festival Overzicht Bekijken
+- Input: Gebruiker klikt op "Bekijk Festivals"
+- Actie: Systeem haalt alle actieve festivals op
+- Output: Lijst van beschikbare festivals
+- Beslissing: Wil gebruiker specifiek festival bekijken?
+  → JA: Ga naar Activiteit 3
+  → NEE: Ga naar Activiteit 9 (Verlaat Website)
+
+ACTIVITEIT 3: Festival Details Bekijken
+- Input: Gebruiker selecteert festival
+- Actie: Systeem toont festival informatie en beschikbare tickets
+- Output: Festival detailpagina met ticket opties
+- Beslissing: Wil gebruiker tickets kopen?
+  → JA: Ga naar Activiteit 4
+  → NEE: Ga terug naar Activiteit 2
+
+ACTIVITEIT 4: Ticket Selectie
+- Input: Gebruiker bekijkt beschikbare ticket types
+- Actie: Gebruiker selecteert ticket type en aantal
+- Output: Geselecteerde tickets
+- Validatie: Zijn tickets nog beschikbaar?
+  → JA: Ga naar Activiteit 5
+  → NEE: Toon foutmelding, ga terug naar Activiteit 3
+
+ACTIVITEIT 5: Authenticatie Check
+- Input: Gebruiker wil tickets toevoegen aan winkelwagen
+- Beslissing: Is gebruiker ingelogd?
+  → JA: Ga naar Activiteit 7 (Toevoegen aan Winkelwagen)
+  → NEE: Ga naar Activiteit 6 (Login/Registratie)
+
+ACTIVITEIT 6: Login of Registratie
+- Beslissing: Heeft gebruiker een account?
+  → JA: Login Proces
+    - Input: Email en wachtwoord
+    - Validatie: Zijn credentials correct?
+      → JA: Gebruiker ingelogd, ga naar Activiteit 7
+      → NEE: Toon foutmelding, herhaal login
+  → NEE: Registratie Proces
+    - Input: Naam, email, wachtwoord, bevestiging
+    - Validatie: Is email uniek en wachtwoord geldig?
+      → JA: Account aangemaakt, gebruiker ingelogd, ga naar Activiteit 7
+      → NEE: Toon foutmelding, herhaal registratie
+
+ACTIVITEIT 7: Toevoegen aan Winkelwagen
+- Input: Ingelogde gebruiker, geselecteerde tickets
+- Actie: Systeem voegt tickets toe aan sessie winkelwagen
+- Validatie: Zijn tickets nog steeds beschikbaar?
+  → JA: Tickets toegevoegd, ga naar Activiteit 8
+  → NEE: Toon foutmelding, ga terug naar Activiteit 3
+- Output: Bevestiging van toevoeging
+- Beslissing: Wil gebruiker meer tickets toevoegen?
+  → JA: Ga terug naar Activiteit 2
+  → NEE: Ga naar Activiteit 8
+
+ACTIVITEIT 8: Winkelwagen Beheren
+- Input: Winkelwagen met tickets
+- Actie: Gebruiker bekijkt winkelwagen
+- Opties:
+  a) Aantal wijzigen
+     - Validatie: Is nieuwe aantal beschikbaar?
+       → JA: Update winkelwagen
+       → NEE: Toon foutmelding
+  b) Item verwijderen
+     - Actie: Verwijder uit winkelwagen
+  c) Doorgaan naar checkout
+     - Ga naar Activiteit 9
+  d) Verder winkelen
+     - Ga terug naar Activiteit 2
+
+ACTIVITEIT 9: Checkout Proces
+- Input: Gevulde winkelwagen
+- Validatie: Is winkelwagen niet leeg?
+  → NEE: Toon foutmelding, ga naar Activiteit 2
+  → JA: Ga verder
+- Stap 1: Klantgegevens Invoeren
+  - Input: Naam, email, telefoon, adres
+  - Validatie: Zijn alle verplichte velden ingevuld?
+    → NEE: Toon foutmelding, herhaal invoer
+    → JA: Ga naar Stap 2
+- Stap 2: Order Overzicht
+  - Output: Overzicht van bestelling en totaalprijs
+  - Beslissing: Akkoord met bestelling?
+    → NEE: Ga terug naar Activiteit 8
+    → JA: Ga naar Stap 3
+- Stap 3: Betaling Verwerken
+  - Actie: Systeem verwerkt betaling (gesimuleerd)
+  - Validatie: Is betaling gelukt?
+    → NEE: Toon foutmelding, ga terug naar Stap 2
+    → JA: Ga naar Activiteit 10
+
+ACTIVITEIT 10: Order Bevestiging
+- Actie: Systeem maakt order aan in database
+- Actie: Systeem genereert unieke ticket codes
+- Actie: Systeem update ticket beschikbaarheid
+- Actie: Systeem stuurt bevestigingsmail
+- Output: Order bevestigingspagina met ticket codes
+- Actie: Winkelwagen wordt geleegd
+
+EINDE: Order succesvol geplaatst
+
+PARALLELLE PROCESSEN:
+--------------------
+
+ADMIN PROCES: Festival Beheer (parallel aan hoofdproces)
+- Admin kan festivals aanmaken/bewerken
+- Admin kan tickets toevoegen/wijzigen
+- Admin kan orders beheren en status wijzigen
+
+ERROR HANDLING:
+--------------
+
+EXCEPTIE 1: Ticket Uitverkocht
+- Trigger: Ticket niet meer beschikbaar tijdens proces
+- Actie: Verwijder uit winkelwagen, toon melding
+- Herstel: Ga terug naar festival overzicht
+
+EXCEPTIE 2: Sessie Verlopen
+- Trigger: Gebruiker sessie timeout
+- Actie: Redirect naar login pagina
+- Herstel: Na login, herstel winkelwagen indien mogelijk
+
+EXCEPTIE 3: Betaling Mislukt
+- Trigger: Betaling kan niet worden verwerkt
+- Actie: Behoud winkelwagen, toon foutmelding
+- Herstel: Ga terug naar betaling stap
+
+BUSINESS RULES IN PROCES:
+------------------------
+
+1. Tickets kunnen alleen gekocht worden door ingelogde gebruikers
+2. Ticket beschikbaarheid wordt real-time gecontroleerd
+3. Winkelwagen wordt automatisch bijgewerkt bij wijzigingen
+4. Orders krijgen automatisch status 'pending' na plaatsing
+5. Ticket codes zijn uniek en worden gebruikt voor QR-codes
+6. Festival capaciteit wordt automatisch bijgewerkt na verkoop 
