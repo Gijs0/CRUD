@@ -1,0 +1,161 @@
+USE CASE DIAGRAM - FESTIVAL TICKETS WEBSITE
+===========================================
+
+ACTOREN:
+--------
+
+1. GAST (Guest)
+   - Niet-ingelogde gebruiker
+
+2. KLANT (Customer)
+   - Geregistreerde gebruiker met customer role
+
+3. ADMIN (Administrator)
+   - Gebruiker met admin role en alle privileges
+
+USE CASES:
+----------
+
+PUBLIEKE FUNCTIONALITEIT (Gast + Klant + Admin):
+-----------------------------------------------
+
+UC001: Bekijk Homepage
+- Actor: Gast, Klant, Admin
+- Beschrijving: Bekijk de hoofdpagina met featured festivals
+- Precondities: Geen
+- Postcondities: Homepage wordt getoond met aankomende festivals
+
+UC002: Bekijk Festivals
+- Actor: Gast, Klant, Admin
+- Beschrijving: Bekijk lijst van alle beschikbare festivals
+- Precondities: Geen
+- Postcondities: Festival overzicht wordt getoond
+
+UC003: Bekijk Festival Details
+- Actor: Gast, Klant, Admin
+- Beschrijving: Bekijk gedetailleerde informatie van een specifiek festival
+- Precondities: Festival moet bestaan
+- Postcondities: Festival details en beschikbare tickets worden getoond
+
+UC004: Registreren
+- Actor: Gast
+- Beschrijving: Nieuwe account aanmaken
+- Precondities: Email moet uniek zijn
+- Postcondities: Account wordt aangemaakt, gebruiker is ingelogd
+
+UC005: Inloggen
+- Actor: Gast
+- Beschrijving: Inloggen met bestaande credentials
+- Precondities: Account moet bestaan
+- Postcondities: Gebruiker is ingelogd
+
+KLANT FUNCTIONALITEIT (Alleen Klant + Admin):
+--------------------------------------------
+
+UC006: Tickets Toevoegen aan Winkelwagen
+- Actor: Klant, Admin
+- Beschrijving: Selecteer tickets en voeg toe aan winkelwagen
+- Precondities: Moet ingelogd zijn, tickets moeten beschikbaar zijn
+- Postcondities: Tickets zijn toegevoegd aan winkelwagen
+
+UC007: Winkelwagen Beheren
+- Actor: Klant, Admin
+- Beschrijving: Bekijk, wijzig of verwijder items uit winkelwagen
+- Precondities: Moet ingelogd zijn
+- Postcondities: Winkelwagen is bijgewerkt
+
+UC008: Bestelling Plaatsen
+- Actor: Klant, Admin
+- Beschrijving: Checkout proces en betaling afhandelen
+- Precondities: Winkelwagen mag niet leeg zijn
+- Postcondities: Order is geplaatst, tickets zijn gereserveerd
+
+UC009: Bestellingen Bekijken
+- Actor: Klant, Admin
+- Beschrijving: Bekijk eigen bestellingsgeschiedenis
+- Precondities: Moet ingelogd zijn
+- Postcondities: Lijst van orders wordt getoond
+
+UC010: Profiel Beheren
+- Actor: Klant, Admin
+- Beschrijving: Wijzig persoonlijke gegevens
+- Precondities: Moet ingelogd zijn
+- Postcondities: Profiel is bijgewerkt
+
+UC011: Uitloggen
+- Actor: Klant, Admin
+- Beschrijving: Sessie beëindigen
+- Precondities: Moet ingelogd zijn
+- Postcondities: Gebruiker is uitgelogd
+
+ADMIN FUNCTIONALITEIT (Alleen Admin):
+------------------------------------
+
+UC012: Festival Aanmaken
+- Actor: Admin
+- Beschrijving: Nieuw festival toevoegen aan systeem
+- Precondities: Moet admin rechten hebben
+- Postcondities: Festival is aangemaakt
+
+UC013: Festival Bewerken
+- Actor: Admin
+- Beschrijving: Bestaand festival wijzigen
+- Precondities: Moet admin rechten hebben, festival moet bestaan
+- Postcondities: Festival is bijgewerkt
+
+UC014: Festival Verwijderen
+- Actor: Admin
+- Beschrijving: Festival uit systeem verwijderen
+- Precondities: Moet admin rechten hebben, geen actieve orders
+- Postcondities: Festival is verwijderd
+
+UC015: Tickets Aanmaken
+- Actor: Admin
+- Beschrijving: Nieuwe ticket types toevoegen aan festival
+- Precondities: Moet admin rechten hebben, festival moet bestaan
+- Postcondities: Tickets zijn beschikbaar voor verkoop
+
+UC016: Tickets Bewerken
+- Actor: Admin
+- Beschrijving: Bestaande tickets wijzigen (prijs, beschikbaarheid)
+- Precondities: Moet admin rechten hebben, ticket moet bestaan
+- Postcondities: Ticket informatie is bijgewerkt
+
+UC017: Tickets Verwijderen
+- Actor: Admin
+- Beschrijving: Tickets uit systeem verwijderen
+- Precondities: Moet admin rechten hebben, geen actieve verkopen
+- Postcondities: Tickets zijn niet meer beschikbaar
+
+UC018: Alle Bestellingen Beheren
+- Actor: Admin
+- Beschrijving: Bekijk en beheer alle orders in systeem
+- Precondities: Moet admin rechten hebben
+- Postcondities: Order overzicht wordt getoond
+
+UC019: Order Status Wijzigen
+- Actor: Admin
+- Beschrijving: Update order status (pending → paid → completed)
+- Precondities: Moet admin rechten hebben, order moet bestaan
+- Postcondities: Order status is bijgewerkt
+
+UC020: Categorieën Beheren
+- Actor: Admin
+- Beschrijving: CRUD operaties voor festival categorieën
+- Precondities: Moet admin rechten hebben
+- Postcondities: Categorieën zijn beheerd
+
+RELATIES TUSSEN USE CASES:
+-------------------------
+
+INCLUDE RELATIES:
+- UC008 (Bestelling Plaatsen) INCLUDES UC006 (Tickets in Winkelwagen)
+- UC013 (Festival Bewerken) INCLUDES UC003 (Festival Details Bekijken)
+- UC016 (Tickets Bewerken) INCLUDES UC015 (Tickets Beheren)
+
+EXTEND RELATIES:
+- UC007 (Winkelwagen Beheren) EXTENDS UC006 (Tickets Toevoegen)
+- UC019 (Order Status Wijzigen) EXTENDS UC018 (Bestellingen Beheren)
+
+GENERALIZATIONS:
+- Klant en Admin zijn specialisaties van Gast (kunnen alles wat Gast kan + meer) 

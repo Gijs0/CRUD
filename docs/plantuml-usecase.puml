@@ -1,0 +1,84 @@
+@startuml UseCase_Festival_Tickets
+
+left to right direction
+
+' Actors
+actor "Gast" as Guest
+actor "Klant" as Customer  
+actor "Admin" as Admin
+
+' Inheritance relationships
+Guest <|-- Customer
+Customer <|-- Admin
+
+' System boundary
+rectangle "Festival Tickets Systeem" {
+    
+    ' Public Use Cases
+    usecase "Bekijk Homepage" as UC01
+    usecase "Bekijk Festivals" as UC02
+    usecase "Bekijk Festival Details" as UC03
+    usecase "Registreren" as UC04
+    usecase "Inloggen" as UC05
+    
+    ' Customer Use Cases
+    usecase "Tickets Toevoegen\naan Winkelwagen" as UC06
+    usecase "Winkelwagen Beheren" as UC07
+    usecase "Bestelling Plaatsen" as UC08
+    usecase "Bestellingen Bekijken" as UC09
+    usecase "Profiel Beheren" as UC10
+    usecase "Uitloggen" as UC11
+    
+    ' Admin Use Cases
+    usecase "Festival Aanmaken" as UC12
+    usecase "Festival Bewerken" as UC13
+    usecase "Festival Verwijderen" as UC14
+    usecase "Tickets Aanmaken" as UC15
+    usecase "Tickets Bewerken" as UC16
+    usecase "Tickets Verwijderen" as UC17
+    usecase "Alle Bestellingen\nBeheren" as UC18
+    usecase "Order Status Wijzigen" as UC19
+    usecase "Categorieën Beheren" as UC20
+}
+
+' Public relationships (Guest, Customer, Admin can all do these)
+Guest --> UC01
+Guest --> UC02
+Guest --> UC03
+Guest --> UC04
+Guest --> UC05
+
+' Customer relationships (Customer and Admin can do these)
+Customer --> UC06
+Customer --> UC07
+Customer --> UC08
+Customer --> UC09
+Customer --> UC10
+Customer --> UC11
+
+' Admin relationships (Only Admin can do these)
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC19
+Admin --> UC20
+
+' Include relationships
+UC08 .> UC06 : <<include>>
+UC13 .> UC03 : <<include>>
+
+' Extend relationships
+UC07 .> UC06 : <<extend>>
+UC19 .> UC18 : <<extend>>
+
+' Notes
+note top of UC04 : Email moet uniek zijn
+note top of UC06 : Alleen voor ingelogde gebruikers
+note top of UC08 : Winkelwagen mag niet leeg zijn
+note top of Admin : Heeft alle privileges\nvan Customer + Admin functies
+
+@enduml 

@@ -1,0 +1,125 @@
+KLASSENDIAGRAM - FESTIVAL TICKETS WEBSITE
+==========================================
+
+KLASSEN:
+--------
+
+1. USER
+   Attributen:
+   - id: int (Primary Key)
+   - name: string
+   - email: string (unique)
+   - password: string (hashed)
+   - role: string (admin, customer)
+   - email_verified_at: timestamp
+   - created_at: timestamp
+   - updated_at: timestamp
+   
+   Methoden:
+   - hasRole(role: string): boolean
+   - isAdmin(): boolean
+   - canManageFestivals(): boolean
+   - canManageTickets(): boolean
+   - canManageOrders(): boolean
+
+2. FESTIVAL
+   Attributen:
+   - id: int (Primary Key)
+   - name: string
+   - description: text
+   - location: string
+   - start_date: datetime
+   - end_date: datetime
+   - image: string
+   - banner_image: string
+   - base_price: decimal(8,2)
+   - capacity: int
+   - tickets_sold: int
+   - is_active: boolean
+   - created_at: timestamp
+   - updated_at: timestamp
+   
+   Methoden:
+   - getAvailableTickets(): int
+   - getIsSoldOut(): boolean
+   - getActiveTickets(): Collection
+
+3. TICKET
+   Attributen:
+   - id: int (Primary Key)
+   - festival_id: int (Foreign Key → Festival)
+   - type: string (early_bird, regular, vip)
+   - description: text
+   - price: decimal(8,2)
+   - quantity_available: int
+   - quantity_sold: int
+   - sale_start_date: datetime
+   - sale_end_date: datetime
+   - is_active: boolean
+   - created_at: timestamp
+   - updated_at: timestamp
+   
+   Methoden:
+   - getRemainingQuantity(): int
+   - getIsAvailable(): boolean
+
+4. ORDER
+   Attributen:
+   - id: int (Primary Key)
+   - user_id: int (Foreign Key → User)
+   - customer_name: string
+   - customer_email: string
+   - customer_phone: string
+   - shipping_address: text
+   - status: string (pending, paid, cancelled, completed)
+   - total_amount: decimal(8,2)
+   - created_at: timestamp
+   - updated_at: timestamp
+
+5. ORDER_ITEM
+   Attributen:
+   - id: int (Primary Key)
+   - order_id: int (Foreign Key → Order)
+   - ticket_id: int (Foreign Key → Ticket)
+   - quantity: int
+   - price: decimal(8,2)
+   - ticket_code: string (unique)
+   - is_used: boolean
+   - created_at: timestamp
+   - updated_at: timestamp
+
+6. CATEGORY
+   Attributen:
+   - id: int (Primary Key)
+   - name: string
+   - description: text
+   - created_at: timestamp
+   - updated_at: timestamp
+
+RELATIES:
+---------
+
+1. User → Order (1:N)
+   - Een User kan meerdere Orders hebben
+   - Een Order behoort tot één User
+
+2. Festival → Ticket (1:N)
+   - Een Festival kan meerdere Tickets hebben
+   - Een Ticket behoort tot één Festival
+
+3. Order → OrderItem (1:N)
+   - Een Order kan meerdere OrderItems hebben
+   - Een OrderItem behoort tot één Order
+
+4. Ticket → OrderItem (1:N)
+   - Een Ticket kan in meerdere OrderItems voorkomen
+   - Een OrderItem verwijst naar één Ticket
+
+BELANGRIJKE BUSINESS RULES:
+---------------------------
+- Users hebben role: 'admin' of 'customer'
+- Alleen admins kunnen festivals en tickets beheren
+- Tickets hebben verschillende types: early_bird, regular, vip
+- Orders hebben status: pending, paid, cancelled, completed
+- OrderItems hebben unieke ticket_codes voor QR-codes
+- Festival capacity = som van alle ticket quantities 

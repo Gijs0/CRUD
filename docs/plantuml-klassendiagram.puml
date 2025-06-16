@@ -1,0 +1,106 @@
+@startuml Klassendiagram_Festival_Tickets
+
+!define PRIMARY_KEY <&key> PK
+!define FOREIGN_KEY <&link-intact> FK
+
+class User {
+    PRIMARY_KEY id : int
+    name : string
+    email : string {unique}
+    password : string {hashed}
+    role : string
+    email_verified_at : timestamp
+    created_at : timestamp
+    updated_at : timestamp
+    --
+    +hasRole(role: string) : boolean
+    +isAdmin() : boolean
+    +canManageFestivals() : boolean
+    +canManageTickets() : boolean
+    +canManageOrders() : boolean
+}
+
+class Festival {
+    PRIMARY_KEY id : int
+    name : string
+    description : text
+    location : string
+    start_date : datetime
+    end_date : datetime
+    image : string
+    banner_image : string
+    base_price : decimal(8,2)
+    capacity : int
+    tickets_sold : int
+    is_active : boolean
+    created_at : timestamp
+    updated_at : timestamp
+    --
+    +getAvailableTickets() : int
+    +getIsSoldOut() : boolean
+    +getActiveTickets() : Collection
+}
+
+class Ticket {
+    PRIMARY_KEY id : int
+    FOREIGN_KEY festival_id : int
+    type : string
+    description : text
+    price : decimal(8,2)
+    quantity_available : int
+    quantity_sold : int
+    sale_start_date : datetime
+    sale_end_date : datetime
+    is_active : boolean
+    created_at : timestamp
+    updated_at : timestamp
+    --
+    +getRemainingQuantity() : int
+    +getIsAvailable() : boolean
+}
+
+class Order {
+    PRIMARY_KEY id : int
+    FOREIGN_KEY user_id : int
+    customer_name : string
+    customer_email : string
+    customer_phone : string
+    shipping_address : text
+    status : string
+    total_amount : decimal(8,2)
+    created_at : timestamp
+    updated_at : timestamp
+}
+
+class OrderItem {
+    PRIMARY_KEY id : int
+    FOREIGN_KEY order_id : int
+    FOREIGN_KEY ticket_id : int
+    quantity : int
+    price : decimal(8,2)
+    ticket_code : string {unique}
+    is_used : boolean
+    created_at : timestamp
+    updated_at : timestamp
+}
+
+class Category {
+    PRIMARY_KEY id : int
+    name : string
+    description : text
+    created_at : timestamp
+    updated_at : timestamp
+}
+
+' Relationships
+User ||--o{ Order : "heeft meerdere"
+Festival ||--o{ Ticket : "bevat meerdere"
+Order ||--o{ OrderItem : "bestaat uit"
+Ticket ||--o{ OrderItem : "verkocht als"
+
+' Notes
+note right of User : Roles: admin, customer
+note right of Order : Status: pending, paid,\ncancelled, completed
+note right of Ticket : Types: early_bird,\nregular, vip
+
+@enduml 
